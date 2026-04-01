@@ -1,4 +1,4 @@
-# Memory in the LLM Era: Modular Architectures and Strategies within a Unified Framework
+# Memory in the LLM Era: Modular Architectures and Strategies in a Unified Framework [Experiment, Analysis & Benchmark]
 
 This repository contains the supplementary materials for our VLDB submission, including the appendix, source code, and plotting notebooks for the figures reported in the paper.
 
