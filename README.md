@@ -279,6 +279,6 @@ Each method includes a built-in `TokenTracker` that records LLM token consumptio
 
 This enables cost estimation and token-efficiency comparison across methods.
 
-### License
+## License
 
 This project is released under the [MIT License](code/LICENSE).
