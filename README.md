@@ -134,7 +134,7 @@ All datasets used by this repository are expected to follow a unified schema tha
         "category": 2
       },
       {
-        ...
+        ...(more questions)
       }
     ],
     "conversation": {
@@ -148,12 +148,12 @@ All datasets used by this repository are expected to follow a unified schema tha
           "text": "Hey Mel! Good to see you! How have you been?"
         },
         {
-          ...
+          ...(more dialogues)
         }
       ],
-      ...
+      ...(more sessions)
     }
-  }
+  },
 ]
 ```
 
