@@ -120,7 +120,7 @@ code/Dataset/
 
 All datasets used by this repository are expected to follow a unified schema that is aligned with the LOCOMO format. LongMemEval and all LongMemEval variants should be converted to this format before use:
 
-```json
+```text
 [
   {
     "sample_id": "sample_001",
