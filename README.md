@@ -12,11 +12,11 @@ In this paper, we propose a unified modular framework that decomposes existing a
 
 ## How to Navigate This Repository
 
-**If you would like to read the supplementary technical details, please start with `appendix.pdf`.**
+If you would like to read the supplementary technical details, please start with `appendix.pdf`.
 
-**If you would like to reproduce the experimental results, please continue to the code and reproduction guide below.**
+If you would like to reproduce the experimental results, please continue to the code and reproduction guide below.
 
-**If you would like to inspect or regenerate the figures in the paper, please open the provided Jupyter notebook in the repository root.**
+If you would like to inspect or regenerate the figures in the paper, please open the provided Jupyter notebook in the repository root.
 
 ## Code and Reproduction Guide
 
