@@ -208,9 +208,9 @@ def run_memoryos(
 
 
 # if __name__ == "__main__":
-#     dataset_path = "/home/docker/IndepthMem/Dataset/LONGMEMEVAL/longmemeval_3.json"
-#     data_storage_path = "/home/docker/IndepthMem/Result/LONGMEMEVAL/memoryos/test0903/mem_data"
-#     output_path = "/home/docker/IndepthMem/Result/LONGMEMEVAL/memoryos/test0903/results.json"
+#     dataset_path = "./Dataset/LONGMEMEVAL/longmemeval_3.json"
+#     data_storage_path = "./Result/LONGMEMEVAL/memoryos/test0903/mem_data"
+#     output_path = "./Result/LONGMEMEVAL/memoryos/test0903/results.json"
 #     with open(dataset_path, 'r', encoding='utf-8') as f:
 #         dataset = json.load(f)
 #     all_results = []

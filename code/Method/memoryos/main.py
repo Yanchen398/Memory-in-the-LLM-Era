@@ -387,4 +387,4 @@ def run_memoryos(
     return results
 
 if __name__ == "__main__":
-    run_memoryos(dataset_path="/home/docker/IndepthMem/Dataset/LOCOMO/locomodemo.json", output_path="/home/docker/IndepthMem/Result/LOCOMO/memoryos/demo.json", memory_path="/home/docker/IndepthMem/Result/LOCOMO/memoryos/mem_tmp_loco_final")
+    run_memoryos(dataset_path="./Dataset/LOCOMO/locomodemo.json", output_path="./Result/LOCOMO/memoryos/demo.json", memory_path="./Result/LOCOMO/memoryos/mem_tmp_loco_final")

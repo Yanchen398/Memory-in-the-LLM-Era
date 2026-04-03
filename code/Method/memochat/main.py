@@ -11,7 +11,7 @@ from transformers.models.gpt2 import GPT2TokenizerFast
 DEFAULT_MODEL_ID = "/home/docker/LLaMA-Factory/output/qwen2_5_lora_sft"
 DEFAULT_BASE_URL = "http://localhost:8001/v1"
 DEFAULT_API_KEY = "1"
-DEFAULT_TOKEN_FILE = "/home/docker/IndepthMem/Result/LONGMEMEVAL/memochat/s200/token_tracker.json"
+DEFAULT_TOKEN_FILE = "/home/docker/IndepthMem/Result/LOCOMO/memochat/test/token_tracker.json"
 
 q_pre = ""
 qa_link = ""

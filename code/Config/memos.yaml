@@ -1,15 +1,15 @@
-dataset_path: /home/docker/IndepthMem/Dataset/LOCOMO/locomo10.json
+dataset_path: ./Dataset/LOCOMO/locomo10.json
 num_workers: 4
 top_k: 10
-version: gpt
+version: test
 
-result_dir: /home/docker/IndepthMem/Result/LOCOMO/memos/memos-gpt
-token_file: /home/docker/IndepthMem/Result/LOCOMO/memos/memos-gpt/token_tracker.json
+result_dir: ./Result/LOCOMO/memos/memos-test
+token_file: ./Result/LOCOMO/memos/memos-test/token_tracker.json
 
-llm_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+llm_model: ./LLaMA-Factory/output/qwen2_5_lora_sft
 llm_api_key: empty
 llm_base_url: http://localhost:8000/v1
-embedding_model_name: /home/docker/Model/all-mpnet-base-v2
+embedding_model_name: your/embedding/model/path
 
 ingestion_top_k: 20
 max_turns_window: 30

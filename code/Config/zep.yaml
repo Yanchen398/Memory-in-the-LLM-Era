@@ -1,13 +1,13 @@
-dataset_path: /home/docker/IndepthMem/Dataset/LOCOMO/locomo10.json
-output_path: /home/docker/IndepthMem/Result/LOCOMO/zep/gpt/result.json
-token_file: /home/docker/IndepthMem/Result/LOCOMO/zep/gpt/token_tracker.json
+dataset_path: ./Dataset/LOCOMO/locomo10.json
+output_path: ./Result/LOCOMO/zep/test/result.json
+token_file: ./Result/LOCOMO/zep/test/token_tracker.json
 
-llm_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
-llm_small_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+llm_model: your/llm/model/path
+llm_small_model: your/llm/model/path
 llm_api_key: empty
 llm_base_url: http://localhost:8000/v1
 
-embedding_model_name: /home/docker/Model/all-MiniLM-L6-v2
+embedding_model_name: your/embedding/model/path
 embedding_api_key: empty
 embedding_base_url: http://localhost:7999/v1
 embedding_dim: 384
@@ -16,7 +16,7 @@ neo4j_uri: bolt://localhost:7687
 neo4j_user: neo4j
 neo4j_password: neo4jneo4j
 
-answer_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+answer_model: your/answer/model/path
 answer_api_key: empty
 answer_base_url: http://localhost:8000/v1
 answer_temperature: 0.0

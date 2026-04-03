@@ -5,7 +5,7 @@ embedding_batch_size: 256
 embedding_model_name: minilm
 llm_api_key: empty
 llm_base_url: http://localhost:8001/v1
-llm_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+llm_model: your/llm/model/path
 llm_parallel_nums: 16
 max_depth: 15
 rate: 0.5
@@ -15,6 +15,6 @@ vdb_name: milvus.db
 
 num_processes: 10
 
-dataset_path: /home/docker/IndepthMem/Dataset/LOCOMO/locomodemo.json
-memory_path: /home/docker/IndepthMem/Result/LOCOMO/sota/test/mem_data
-output_path: /home/docker/IndepthMem/Result/LOCOMO/sota/test/result.json
+dataset_path: ./Dataset/LOCOMO/locomodemo.json
+memory_path: ./Result/LOCOMO/sota/test/mem_data
+output_path: ./Result/LOCOMO/sota/test/result.json

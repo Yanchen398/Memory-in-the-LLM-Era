@@ -1,8 +1,8 @@
-input_data: /home/docker/IndepthMem/Dataset/LOCOMO/locomo10.json
-memory_output_path: /home/docker/IndepthMem/Result/LOCOMO/memochat/default72b/memory.json
-prompt_path: /home/docker/IndepthMem/Method/memochat/prompt_loco.json
-results_output_path: /home/docker/IndepthMem/Result/LOCOMO/memochat/default72b/result.json
-openai_modelid: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+input_data: ./Dataset/LOCOMO/locomo10.json
+memory_output_path: ./Result/LOCOMO/memochat/test/memory.json
+prompt_path: ./Method/memochat/prompt_loco.json
+results_output_path: ./Result/LOCOMO/memochat/test/result.json
+openai_modelid: your/llm/model/path
 base_url: http://localhost:8001/v1
 api_key: "1"
-token_file: /home/docker/IndepthMem/Result/LONGMEMEVAL/memochat/s200/token_tracker.json
+token_file: ./Result/LOCOMO/memochat/test/token_tracker.json
