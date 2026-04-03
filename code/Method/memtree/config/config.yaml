@@ -1,0 +1,19 @@
+base_threshold: 0.4
+batch_size: 64
+collection_name: memory_tree
+
+dimension: 1024
+embedding_batch_size: 256
+embedding_model_name: models--BAAI--bge-m3
+llm_parallel_nums: 16
+max_depth: 15
+mode: vallina
+
+rate: 0.5
+retrieve_threshold: 0.3
+save_name: memtree.pkl
+top_k_retrieve: 10
+vdb_name: milvus.db
+
+dataset_name: longmemevaldemo
+# output_path: 

@@ -1,0 +1,61 @@
+dataset_path: /home/docker/IndepthMem/Dataset/LOCOMO/locomo10.json
+num_workers: 4
+top_k: 10
+version: gpt
+
+result_dir: /home/docker/IndepthMem/Result/LOCOMO/memos/memos-gpt
+token_file: /home/docker/IndepthMem/Result/LOCOMO/memos/memos-gpt/token_tracker.json
+
+llm_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+embedding_model_name: /home/docker/Model/all-mpnet-base-v2
+
+ingestion_top_k: 20
+max_turns_window: 30
+enable_textual_memory: true
+enable_activation_memory: false
+enable_parametric_memory: false
+
+graph_db_uri: bolt://localhost:7687
+graph_db_user: neo4j
+graph_db_password: neo4jneo4j
+graph_db_auto_create: true
+
+mos_config:
+  chat_model:
+    config:
+      temperature: 0.1
+      remove_think_prefix: true
+      max_tokens: 4096
+  mem_reader:
+    config:
+      llm:
+        config:
+          temperature: 0.8
+          max_tokens: 1024
+          top_p: 0.9
+          top_k: 50
+      chunker:
+        backend: sentence
+        config:
+          tokenizer_or_token_counter: gpt2
+          chunk_size: 512
+          chunk_overlap: 128
+          min_sentences_per_chunk: 1
+
+mem_cube_config:
+  text_mem:
+    config:
+      extractor_llm:
+        config:
+          temperature: 0.8
+          max_tokens: 1024
+          top_p: 0.9
+          top_k: 50
+      dispatcher_llm:
+        config:
+          temperature: 0.8
+          max_tokens: 1024
+          top_p: 0.9
+          top_k: 50

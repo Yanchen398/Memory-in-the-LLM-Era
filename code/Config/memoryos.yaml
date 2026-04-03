@@ -1,0 +1,8 @@
+dataset_path: /home/docker/IndepthMem/Dataset/LOCOMO/locomo10.json
+memory_path: /home/docker/IndepthMem/Result/LOCOMO/memoryos/gpt/mem_data
+output_path: /home/docker/IndepthMem/Result/LOCOMO/memoryos/gpt/result.json
+llm_model: /home/docker/LLaMA-Factory/output/qwen2_5_lora_sft
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+embedding_model_name: /home/docker/Model/all-MiniLM-L6-v2
+token_file: /home/docker/IndepthMem/Result/LOCOMO/memoryos/token_tracker.json

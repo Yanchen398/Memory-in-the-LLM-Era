@@ -1,0 +1,51 @@
+{
+  "user_id": "__USER_ID__",
+  "cube_id": "__USER_ID__",
+  "text_mem": {
+    "backend": "tree_text",
+    "config": {
+      "extractor_llm": {
+        "backend": "openai",
+        "config": {
+          "model_name_or_path": "/home/docker/LLaMA-Factory/output/qwen2_5_lora_sft",
+          "temperature": 0.8,
+          "max_tokens": 1024,
+          "top_p": 0.9,
+          "top_k": 50,
+          "api_key": "empty",
+          "api_base": "http://localhost:8000/v1"
+        }
+      },
+      "dispatcher_llm": {
+        "backend": "openai",
+        "config": {
+          "model_name_or_path": "/home/docker/LLaMA-Factory/output/qwen2_5_lora_sft",
+          "temperature": 0.8,
+          "max_tokens": 1024,
+          "top_p": 0.9,
+          "top_k": 50,
+          "api_key": "empty",
+          "api_base": "http://localhost:8000/v1"
+        }
+      },
+      "graph_db": {
+        "backend": "neo4j",
+        "config": {
+          "uri": "bolt://localhost:7687",
+          "user": "neo4j",
+          "password": "neo4jneo4j",
+          "db_name": "__DB_NAME__",
+          "auto_create": true
+        }
+      },
+      "embedder": {
+        "backend": "sentence_transformer",
+        "config": {
+          "model_name_or_path": "/home/docker/Model/all-mpnet-base-v2"
+        }
+      }
+    }
+  },
+  "act_mem": {},
+  "para_mem": {}
+}
