@@ -17,14 +17,11 @@ Supported commands:
    python run.py memoryos --config_file <config.yaml> --dataset_path <path> --output_path <path>
 
 3. amem - Run the Agentic Memory method
-   Direct-argument mode:
-   python run.py amem --dataset <path> --model <model> --modelname <name> --output <path> --ratio <ratio> --backend <backend> --retrieve_k <k>
-
    Config-file mode:
    python run.py amem --config_file <config.yaml>
 
    Mixed mode (use a config file and override selected values):
-   python run.py amem --config_file <config.yaml> --dataset <path> --output <path>
+   python run.py amem --config_file <config.yaml> --dataset_path <path> --output_path <path>
 
 4. zep - Run the Zep (Graphiti) method
    Basic usage (config file required):
@@ -309,59 +306,34 @@ def run_amem(config_manager: ConfigManager):
     
     try:
         print("Importing the AgenticMemory module...")
-        # Add the AgenticMemory directory to the Python path.
-        agentic_memory_path = os.path.join(current_dir, 'AgenticMemory')
-        agentic_memory_path = "/home/docker/AgenticMemory"
-        if agentic_memory_path not in sys.path:
-            sys.path.insert(0, agentic_memory_path)
-        
-        # Try importing from the package.
-
-        from Method.amem import simple_qa_session
+        from Method.amem import run_amem as run_amem_method
         print("AgenticMemory module imported successfully.")
         
         config = config_manager.get_all()
+        config_path = config_manager.args.config_file
         
-        # Apply default values.
-        dataset_path = config.get('dataset', 'data/locomodemo.json')
-        model = config.get('model', '/home/docker/LLaMA-Factory/output/qwen2_5_lora_sft')
-        modelname = config.get('modelname', 'qwen2_5_lora_sft')
-        output_path = config.get('output', 'result/qa_results.json')
-        ratio = config.get('ratio', 1.0)
-        backend = config.get('backend', 'openai')
-        retrieve_k = config.get('retrieve_k', 10)
-        start_idx = config.get('start_idx', 0)
-        end_idx = config.get('end_idx', None)
-        # Convert paths to absolute paths when needed.
-        if not os.path.isabs(dataset_path):
-            dataset_path = os.path.join(agentic_memory_path, dataset_path)
-        
-        if output_path and not os.path.isabs(output_path):
-            output_path = os.path.join(agentic_memory_path, output_path)
-        
-        print("Using parameters:")
-        print(f"  Dataset: {dataset_path}")
-        print(f"  Model: {model}")
-        print(f"  Model name: {modelname}")
-        print(f"  Output path: {output_path}")
-        print(f"  Data ratio: {ratio}")
-        print(f"  Backend: {backend}")
-        print(f"  Retrieval K: {retrieve_k}")
-        
-        # Run simple_qa_session.
-        qa_results = simple_qa_session(
-            dataset_path=dataset_path,
-            model=model,
-            modelname=modelname,
-            output_path=output_path,
-            ratio=ratio,
-            backend=backend,
-            retrieve_k=retrieve_k,
-            start_idx=start_idx,
-            end_idx=end_idx
+        if config_path:
+            print(f"Using config file: {config_path}")
+
+        results = run_amem_method(
+            dataset_path=config.get('dataset_path') or config.get('dataset'),
+            output_path=config.get('output_path') or config.get('output'),
+            token_file=config.get('token_file'),
+            llm_model=config.get('llm_model') or config.get('model'),
+            llm_api_key=config.get('llm_api_key'),
+            llm_base_url=config.get('llm_base_url'),
+            embedding_model_name=config.get('embedding_model_name'),
+            backend=config.get('backend', 'openai'),
+            retrieve_k=config.get('retrieve_k', 10),
+            ratio=config.get('ratio', 1.0),
+            start_idx=config.get('start_idx', 0),
+            end_idx=config.get('end_idx'),
+            config_path=config_path,
+            modelname=config.get('modelname'),
         )
         
-        print(f"Agentic Memory completed successfully and answered {len(qa_results)} questions.")
+        sample_count = len(results) if isinstance(results, list) else 0
+        print(f"Agentic Memory completed successfully. Aggregated {sample_count} sample results.")
         return True
         
     except ImportError as e:
@@ -420,10 +392,14 @@ def main():
     # Agentic Memory method
     parser_amem = subparsers.add_parser('amem', help='Run the Agentic Memory method')
     parser_amem.add_argument('--config_file', type=str, help='Path to the config file')
-    parser_amem.add_argument('--dataset', type=str, help='Dataset path')
-    parser_amem.add_argument('--model', type=str, help='Model path')
+    parser_amem.add_argument('--dataset_path', '--dataset', dest='dataset_path', type=str, help='Dataset path')
+    parser_amem.add_argument('--output_path', '--output', dest='output_path', type=str, help='Output file path')
+    parser_amem.add_argument('--token_file', type=str, help='Token tracking output file path')
+    parser_amem.add_argument('--llm_model', '--model', dest='llm_model', type=str, help='LLM model path or ID')
+    parser_amem.add_argument('--llm_api_key', type=str, help='LLM API key')
+    parser_amem.add_argument('--llm_base_url', type=str, help='LLM API base URL')
+    parser_amem.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
     parser_amem.add_argument('--modelname', type=str, help='Model name')
-    parser_amem.add_argument('--output', type=str, help='Output file path')
     parser_amem.add_argument('--ratio', type=float, help='Dataset processing ratio (0.0 to 1.0)')
     parser_amem.add_argument('--backend', type=str, help='Backend type (openai or ollama)')
     parser_amem.add_argument('--retrieve_k', type=int, help='Number of memories to retrieve')

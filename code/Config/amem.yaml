@@ -1,0 +1,14 @@
+dataset_path: ./Dataset/LOCOMO/locomo10.json
+output_path: ./Result/LOCOMO/amem/test/result.json
+token_file: ./Result/LOCOMO/amem/test/token_tracker.json
+
+llm_model: your/llm/model/path
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+embedding_model_name: all-MiniLM-L6-v2
+
+backend: openai
+retrieve_k: 10
+ratio: 1.0
+start_idx: 0
+# end_idx:
