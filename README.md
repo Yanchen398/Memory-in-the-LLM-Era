@@ -46,7 +46,7 @@ We implement and evaluate the following memory architectures under our unified f
 
 - Python 3.10+
 - An OpenAI-compatible API endpoint
-- Neo4j graph database (for Mem0$^g$, Zep and MemOS)
+- Neo4j graph database (for Mem0<sup>g</sup>, Zep and MemOS)
 - PostgreSQL 14 with pgvector enabled (for MemGPT)
 
 #### Get the Code
