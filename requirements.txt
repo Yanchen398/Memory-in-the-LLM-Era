@@ -44,7 +44,5 @@ matplotlib==3.10.3
 seaborn==0.13.2
 
 # External method packages used by the repository
-# `MemoryOS` is installed from the vendored local project at `code/Method/memos`.
-# Its distribution name is `MemoryOS`, while its import package is `memos`.
 -e ./code/Method/memos
 MemoryOS-BaiJia==0.1.1
