@@ -1,5 +1,7 @@
 # Memory in the LLM Era: Modular Architectures and Strategies within a Unified Framework
 
+Paper: <https://arxiv.org/pdf/2604.01707>
+
 This repository contains the supplementary materials for our VLDB submission, including the appendix, source code, and plotting notebooks for the figures reported in the paper.
 
 In this paper, we propose a unified modular framework that decomposes existing agent memory systems into four components: *Information Extraction*, *Memory Management*, *Memory Storage*, and *Information Retrieval*. We systematically benchmark representative memory methods together with our newly designed state-of-the-art method on long-term conversational datasets.
