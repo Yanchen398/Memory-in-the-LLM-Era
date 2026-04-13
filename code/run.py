@@ -58,7 +58,21 @@ Supported commands:
    Override values from the config file:
    python run.py memgpt --config_file <config.yaml> --dataset_path <path> --output_path <path>
 
-Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, `sota`, and `memgpt` now require a config file and no longer support pure CLI-only mode.
+9. mem0 - Run the Mem0 method
+   Basic usage (config file required):
+   python run.py mem0 --config_file <config.yaml>
+
+   Override values from the config file:
+   python run.py mem0 --config_file <config.yaml> --dataset_path <path> --output_path <path>
+
+10. mem0g - Run the Mem0$^g$ method
+   Basic usage (config file required):
+   python run.py mem0g --config_file <config.yaml>
+
+   Override values from the config file:
+   python run.py mem0g --config_file <config.yaml> --dataset_path <path> --output_path <path>
+
+Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, `sota`, `memgpt`, `mem0`, and `mem0g` now require a config file and no longer support pure CLI-only mode.
 """
 
 import argparse
@@ -405,6 +419,68 @@ def run_memgpt(config_manager: ConfigManager):
         return False
 
 
+def _run_mem0_variant(config_manager: ConfigManager, graph_mode: bool):
+    method_label = "Mem0^g" if graph_mode else "Mem0"
+    print(f"Running {method_label}...")
+
+    try:
+        print(f"Importing the {method_label} module...")
+        from Method.mem0 import run_mem0, run_mem0g
+        print(f"{method_label} module imported successfully.")
+
+        runner = run_mem0g if graph_mode else run_mem0
+        config = config_manager.get_all()
+        config_path = config_manager.args.config_file
+
+        if config_path:
+            print(f"Using config file: {config_path}")
+
+        results = runner(
+            dataset_path=config.get('dataset_path') or config.get('dataset'),
+            output_path=config.get('output_path') or config.get('output'),
+            memory_path=config.get('memory_path'),
+            token_file=config.get('token_file'),
+            llm_model=config.get('llm_model') or config.get('model'),
+            llm_api_key=config.get('llm_api_key'),
+            llm_base_url=config.get('llm_base_url'),
+            llm_provider=config.get('llm_provider'),
+            embedding_model_name=config.get('embedding_model_name'),
+            embedding_api_key=config.get('embedding_api_key'),
+            embedding_base_url=config.get('embedding_base_url'),
+            embedding_dim=config.get('embedding_dim'),
+            retrieve_k=config.get('retrieve_k', 10),
+            batch_size=config.get('batch_size', 2),
+            ratio=config.get('ratio', 1.0),
+            start_idx=config.get('start_idx', 0),
+            end_idx=config.get('end_idx'),
+            neo4j_uri=config.get('neo4j_uri'),
+            neo4j_user=config.get('neo4j_user'),
+            neo4j_password=config.get('neo4j_password'),
+            config_path=config_path,
+        )
+
+        sample_count = len(results) if isinstance(results, list) else 0
+        print(f"{method_label} completed successfully. Aggregated {sample_count} sample results.")
+        return True
+
+    except ImportError as e:
+        print(f"Error: failed to import the {method_label} module: {e}")
+        return False
+    except Exception as e:
+        print(f"Error: {method_label} raised an exception: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def run_mem0(config_manager: ConfigManager):
+    return _run_mem0_variant(config_manager, graph_mode=False)
+
+
+def run_mem0g(config_manager: ConfigManager):
+    return _run_mem0_variant(config_manager, graph_mode=True)
+
+
 
 def main():
     parser = argparse.ArgumentParser(description='Unified runner with config-file support and CLI overrides')
@@ -562,6 +638,51 @@ def main():
     parser_memgpt.add_argument('--retrieve_k', type=int, help='Number of memories to retrieve')
     parser_memgpt.add_argument('--start_idx', type=int, help='Start sample index (inclusive)')
     parser_memgpt.add_argument('--end_idx', type=int, help='End sample index (exclusive)')
+
+    # Mem0 method
+    parser_mem0 = subparsers.add_parser('mem0', help='Run the Mem0 method')
+    parser_mem0.add_argument('--config_file', type=str, help='Path to the config file')
+    parser_mem0.add_argument('--dataset_path', '--dataset', dest='dataset_path', type=str, help='Dataset path')
+    parser_mem0.add_argument('--output_path', '--output', dest='output_path', type=str, help='Output result path')
+    parser_mem0.add_argument('--memory_path', type=str, help='Runtime memory directory')
+    parser_mem0.add_argument('--token_file', type=str, help='Token tracking output file path')
+    parser_mem0.add_argument('--llm_model', '--model', dest='llm_model', type=str, help='LLM model ID or path')
+    parser_mem0.add_argument('--llm_api_key', type=str, help='LLM API key')
+    parser_mem0.add_argument('--llm_base_url', type=str, help='LLM API base URL')
+    parser_mem0.add_argument('--llm_provider', type=str, help='Mem0 LLM provider name')
+    parser_mem0.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
+    parser_mem0.add_argument('--embedding_api_key', type=str, help='Embedding API key')
+    parser_mem0.add_argument('--embedding_base_url', type=str, help='Embedding API base URL')
+    parser_mem0.add_argument('--embedding_dim', type=int, help='Embedding dimension')
+    parser_mem0.add_argument('--retrieve_k', type=int, help='Number of memories to retrieve')
+    parser_mem0.add_argument('--batch_size', type=int, help='Dialogue ingestion batch size')
+    parser_mem0.add_argument('--ratio', type=float, help='Dataset processing ratio')
+    parser_mem0.add_argument('--start_idx', '--sample_start', dest='start_idx', type=int, help='Start sample index (inclusive)')
+    parser_mem0.add_argument('--end_idx', '--sample_end', dest='end_idx', type=int, help='End sample index (exclusive)')
+
+    # Mem0^g method
+    parser_mem0g = subparsers.add_parser('mem0g', help='Run the Mem0^g method')
+    parser_mem0g.add_argument('--config_file', type=str, help='Path to the config file')
+    parser_mem0g.add_argument('--dataset_path', '--dataset', dest='dataset_path', type=str, help='Dataset path')
+    parser_mem0g.add_argument('--output_path', '--output', dest='output_path', type=str, help='Output result path')
+    parser_mem0g.add_argument('--memory_path', type=str, help='Runtime memory directory')
+    parser_mem0g.add_argument('--token_file', type=str, help='Token tracking output file path')
+    parser_mem0g.add_argument('--llm_model', '--model', dest='llm_model', type=str, help='LLM model ID or path')
+    parser_mem0g.add_argument('--llm_api_key', type=str, help='LLM API key')
+    parser_mem0g.add_argument('--llm_base_url', type=str, help='LLM API base URL')
+    parser_mem0g.add_argument('--llm_provider', type=str, help='Mem0 LLM provider name')
+    parser_mem0g.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
+    parser_mem0g.add_argument('--embedding_api_key', type=str, help='Embedding API key')
+    parser_mem0g.add_argument('--embedding_base_url', type=str, help='Embedding API base URL')
+    parser_mem0g.add_argument('--embedding_dim', type=int, help='Embedding dimension')
+    parser_mem0g.add_argument('--retrieve_k', type=int, help='Number of memories to retrieve')
+    parser_mem0g.add_argument('--batch_size', type=int, help='Dialogue ingestion batch size')
+    parser_mem0g.add_argument('--ratio', type=float, help='Dataset processing ratio')
+    parser_mem0g.add_argument('--start_idx', '--sample_start', dest='start_idx', type=int, help='Start sample index (inclusive)')
+    parser_mem0g.add_argument('--end_idx', '--sample_end', dest='end_idx', type=int, help='End sample index (exclusive)')
+    parser_mem0g.add_argument('--neo4j_uri', type=str, help='Neo4j URI')
+    parser_mem0g.add_argument('--neo4j_user', type=str, help='Neo4j username')
+    parser_mem0g.add_argument('--neo4j_password', type=str, help='Neo4j password')
     
     args = parser.parse_args()
     
@@ -597,6 +718,10 @@ def main():
         success = run_sota(config_manager)
     elif args.command == 'memgpt':
         success = run_memgpt(config_manager)
+    elif args.command == 'mem0':
+        success = run_mem0(config_manager)
+    elif args.command == 'mem0g':
+        success = run_mem0g(config_manager)
     else:
         print(f"Error: unknown command '{args.command}'")
         parser.print_help()

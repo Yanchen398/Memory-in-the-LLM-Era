@@ -1,0 +1,24 @@
+dataset_path: ./Dataset/LOCOMO/locomo10.json
+output_path: ./Result/LOCOMO/mem0g/test/result.json
+memory_path: ./Result/LOCOMO/mem0g/test/runtime
+token_file: ./Result/LOCOMO/mem0g/test/token_tracker.json
+
+llm_model: your/llm/model/path
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+llm_provider: vllm
+
+embedding_model_name: your/embedding/model/path
+embedding_api_key: empty
+embedding_base_url: http://localhost:7999/v1
+embedding_dim: 384
+
+neo4j_uri: bolt://localhost:7687
+neo4j_user: neo4j
+neo4j_password: neo4j
+
+retrieve_k: 10
+batch_size: 2
+ratio: 1.0
+start_idx: 0
+# end_idx:

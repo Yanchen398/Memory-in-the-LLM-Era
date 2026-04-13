@@ -71,6 +71,7 @@ code/
 ├── Config/                 # YAML config files for each method
 │   ├── amem.yaml
 │   ├── mem0.yaml
+│   ├── mem0g.yaml
 │   ├── memgpt.yaml
 │   ├── memochat.yaml
 │   ├── memorybank.yaml
