@@ -1,7 +1,3 @@
-# GitHub-friendly Conda environment for this repository.
-# It keeps the environment definition portable and delegates Python packages
-# to `requirements.github.txt`.
-
 name: memory-llm-era
 channels:
   - conda-forge

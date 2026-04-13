@@ -1,15 +1,7 @@
-# GitHub-friendly dependency list for this repository.
-# This file keeps the packages that are directly used by the codebase
-# and external method repos imported at runtime.
-# It intentionally avoids machine-local `file:///...` entries from `pip freeze`.
-#
 # Notes:
 # - `faiss-cpu` is used here for portability. If you specifically need GPU FAISS,
 #   replace it with a compatible `faiss-gpu` build for your platform.
-# - The editable `memos` dependency installs its own package-level requirements,
-#   so this file only keeps the repository-level packages that are still needed explicitly.
 
-# Core runtime
 aiofiles==24.1.0
 numpy==1.26.2
 openai==1.91.0
@@ -20,7 +12,6 @@ requests==2.32.3
 tiktoken==0.9.0
 tqdm==4.67.1
 
-# Modeling, retrieval, and evaluation
 bert-score==0.3.13
 faiss-cpu==1.11.0
 litellm==1.73.2
@@ -35,13 +26,11 @@ sentence-transformers==4.1.0
 torch==2.6.0
 transformers==4.51.3
 
-# Vector / graph backends
 graphiti-core==0.24.1
 letta-client==0.1.183
 milvus-lite==2.5.1
 neo4j==5.28.1
 pymilvus==2.5.11
 
-# External method packages used by the repository
 -e ./code/Method/memos
 MemoryOS-BaiJia==0.1.1
