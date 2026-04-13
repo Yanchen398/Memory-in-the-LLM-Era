@@ -5,6 +5,8 @@ import os
 import time
 from typing import Dict, List, Optional, Tuple
 
+import numpy as np
+
 
 DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-72B-Instruct-AWQ"
 DEFAULT_LLM_API_KEY = "EMPTY"
@@ -180,34 +182,15 @@ class TokenTracker:
 def import_runtime_dependencies():
     try:
         import openai
-        from langchain.embeddings import HuggingFaceEmbeddings
-        from langchain.llms import OpenAIChat
-        from llama_index import (
-            Document,
-            GPTVectorStoreIndex,
-            LLMPredictor,
-            PromptHelper,
-            QuestionAnswerPrompt,
-            ServiceContext,
-        )
-        from llama_index.embeddings.langchain import LangchainEmbedding
+        from sentence_transformers import SentenceTransformer
     except ImportError as exc:
         raise ImportError(
-            "MemoryBank requires `openai`, `llama_index`, `langchain`, and related vendored dependencies "
-            "to be installed in the current environment."
+            "MemoryBank requires `openai` and `sentence-transformers` to be installed in the current environment."
         ) from exc
 
     return {
         "openai": openai,
-        "HuggingFaceEmbeddings": HuggingFaceEmbeddings,
-        "OpenAIChat": OpenAIChat,
-        "Document": Document,
-        "GPTVectorStoreIndex": GPTVectorStoreIndex,
-        "LLMPredictor": LLMPredictor,
-        "PromptHelper": PromptHelper,
-        "QuestionAnswerPrompt": QuestionAnswerPrompt,
-        "ServiceContext": ServiceContext,
-        "LangchainEmbedding": LangchainEmbedding,
+        "SentenceTransformer": SentenceTransformer,
     }
 
 
@@ -368,50 +351,55 @@ def convert_sample_memory(
     }, session_analyses
 
 
-def build_memory_docs(memory_data: Dict, Document) -> List:
-    memory_docs = []
+def build_memory_docs(memory_data: Dict) -> List[str]:
+    memory_docs: List[str] = []
     for session_time, conversations in (memory_data.get("history") or {}).items():
         for item in conversations:
-            memory_docs.append(
-                Document(text=f"Session at {session_time}: {item.get('query', '')} -> {item.get('response', '')}")
-            )
+            memory_docs.append(f"Session at {session_time}: {item.get('query', '')} -> {item.get('response', '')}")
     for session_time, summary_text in (memory_data.get("summary") or {}).items():
-        memory_docs.append(Document(text=f"Session {session_time} Summary: {summary_text}"))
+        memory_docs.append(f"Session {session_time} Summary: {summary_text}")
     return memory_docs
 
 
-def build_service_context(runtime: Dict, llm_model: str, llm_api_key: str, llm_base_url: str, embedding_model_name: str):
-    llm_predictor = runtime["LLMPredictor"](
-        llm=runtime["OpenAIChat"](
-            model_name=llm_model,
-            temperature=0.7,
-            openai_api_base=llm_base_url,
-            openai_api_key=llm_api_key,
-        )
+def retrieve_memory_texts(question: str, memory_docs: List[str], doc_embeddings, embedder, retrieve_k: int) -> List[str]:
+    if not memory_docs:
+        return []
+
+    query_embedding = np.asarray(embedder.encode([question], show_progress_bar=False)[0], dtype=np.float32)
+    doc_matrix = np.asarray(doc_embeddings, dtype=np.float32)
+    doc_norms = np.linalg.norm(doc_matrix, axis=1)
+    query_norm = np.linalg.norm(query_embedding)
+    denominator = np.maximum(doc_norms * max(query_norm, 1e-12), 1e-12)
+    similarities = np.dot(doc_matrix, query_embedding) / denominator
+
+    top_k = min(max(int(retrieve_k or DEFAULT_RETRIEVE_K), 1), len(memory_docs))
+    top_indices = np.argsort(-similarities)[:top_k]
+    return [memory_docs[index] for index in top_indices]
+
+
+def answer_question(
+    openai_module,
+    question: str,
+    retrieved_texts: List[str],
+    model_name: str,
+    api_key: str,
+    base_url: str,
+):
+    context_text = "\n".join(retrieved_texts) if retrieved_texts else "No relevant memory found."
+    response = call_chat_completion(
+        openai_module,
+        model_name=model_name,
+        api_key=api_key,
+        base_url=base_url,
+        messages=[
+            {
+                "role": "user",
+                "content": QA_PROMPT_TEMPLATE.format(context_str=context_text, query_str=question),
+            }
+        ],
+        temperature=0.0,
     )
-    embedding_model = runtime["HuggingFaceEmbeddings"](model_name=embedding_model_name)
-    embed_model = runtime["LangchainEmbedding"](embedding_model)
-    prompt_helper = runtime["PromptHelper"](4096, 256, 20)
-    return runtime["ServiceContext"].from_defaults(
-        llm_predictor=llm_predictor,
-        prompt_helper=prompt_helper,
-        embed_model=embed_model,
-    )
-
-
-def extract_retrieved_texts(source_nodes: Sequence) -> List[str]:
-    retrieved = []
-    for node in source_nodes or []:
-        node_payload = getattr(node, "node", node)
-        text = getattr(node_payload, "text", None)
-        if text:
-            retrieved.append(str(text))
-    return retrieved
-
-
-def answer_question(index, question: str, qa_prompt, retrieve_k: int):
-    response = index.query(question, text_qa_template=qa_prompt, similarity_top_k=retrieve_k)
-    return str(response).strip(), extract_retrieved_texts(getattr(response, "source_nodes", []))
+    return extract_response_text(response)
 
 
 def load_dataset(dataset_path: str) -> List[Dict]:
@@ -562,14 +550,7 @@ def run_memorybank(
     results_by_id = collect_existing_results(output_path, selected_samples, cache_dir)
     aggregated_results = aggregate_results(output_path, selected_samples, cache_dir, results_by_id)
 
-    service_context = build_service_context(
-        runtime=runtime,
-        llm_model=llm_model or DEFAULT_LLM_MODEL,
-        llm_api_key=llm_api_key or DEFAULT_LLM_API_KEY,
-        llm_base_url=llm_base_url or DEFAULT_LLM_BASE_URL,
-        embedding_model_name=embedding_model_name or DEFAULT_EMBEDDING_MODEL_NAME,
-    )
-    qa_prompt = runtime["QuestionAnswerPrompt"](QA_PROMPT_TEMPLATE)
+    embedder = runtime["SentenceTransformer"](embedding_model_name or DEFAULT_EMBEDDING_MODEL_NAME)
 
     sample_token_files: List[Tuple[str, str]] = []
 
@@ -609,17 +590,17 @@ def run_memorybank(
                 )
                 write_json(sample_analysis_file, session_analyses)
 
-                memory_docs = build_memory_docs(memory_data, runtime["Document"])
+                memory_docs = build_memory_docs(memory_data)
                 qa_results = []
 
                 if memory_docs:
                     with tracker_stage(tracker, "build_index"):
-                        index = runtime["GPTVectorStoreIndex"].from_documents(
-                            memory_docs,
-                            service_context=service_context,
+                        doc_embeddings = np.asarray(
+                            embedder.encode(memory_docs, show_progress_bar=False),
+                            dtype=np.float32,
                         )
                 else:
-                    index = None
+                    doc_embeddings = None
 
                 for qa_index, qa in enumerate(sample.get("qa", [])):
                     question = qa.get("question", "")
@@ -627,16 +608,25 @@ def run_memorybank(
                     category = qa.get("category")
 
                     with tracker_stage(tracker, f"qa_{qa_index}"):
-                        if index is None:
+                        if doc_embeddings is None:
                             response = "No information available in memory."
                             retrieved = []
                         else:
                             try:
-                                response, retrieved = answer_question(
-                                    index=index,
+                                retrieved = retrieve_memory_texts(
                                     question=question,
-                                    qa_prompt=qa_prompt,
+                                    memory_docs=memory_docs,
+                                    doc_embeddings=doc_embeddings,
+                                    embedder=embedder,
                                     retrieve_k=retrieve_k if retrieve_k is not None else DEFAULT_RETRIEVE_K,
+                                )
+                                response = answer_question(
+                                    openai_module=openai_module,
+                                    question=question,
+                                    retrieved_texts=retrieved,
+                                    model_name=llm_model or DEFAULT_LLM_MODEL,
+                                    api_key=llm_api_key or DEFAULT_LLM_API_KEY,
+                                    base_url=llm_base_url or DEFAULT_LLM_BASE_URL,
                                 )
                             except Exception as exc:
                                 response = f"Error in generation: {exc}"

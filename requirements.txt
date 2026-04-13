@@ -1,13 +1,13 @@
 # GitHub-friendly dependency list for this repository.
-# This file keeps the packages that are directly used by the codebase,
-# plotting notebook, and external method repos imported at runtime.
+# This file keeps the packages that are directly used by the codebase
+# and external method repos imported at runtime.
 # It intentionally avoids machine-local `file:///...` entries from `pip freeze`.
 #
 # Notes:
 # - `faiss-cpu` is used here for portability. If you specifically need GPU FAISS,
 #   replace it with a compatible `faiss-gpu` build for your platform.
-# - The MemOS / memobase dependencies are pinned to the same upstream commits
-#   captured in the exported environment.
+# - The editable `memos` dependency installs its own package-level requirements,
+#   so this file only keeps the repository-level packages that are still needed explicitly.
 
 # Core runtime
 aiofiles==24.1.0
@@ -16,32 +16,31 @@ openai==1.91.0
 pandas==2.2.3
 PyYAML==6.0.2
 python-dotenv==1.1.1
+requests==2.32.3
 tiktoken==0.9.0
 tqdm==4.67.1
 
-# Modeling and evaluation
+# Modeling, retrieval, and evaluation
 bert-score==0.3.13
 faiss-cpu==1.11.0
+litellm==1.73.2
+mem0ai==0.1.109
 nltk==3.9.1
+rank-bm25==0.2.2
 ray==2.47.1
 rouge-score==0.1.2
 scikit-learn==1.7.0
 scipy==1.15.3
 sentence-transformers==4.1.0
 torch==2.6.0
-torchaudio==2.6.0
-torchvision==0.21.0
 transformers==4.51.3
 
 # Vector / graph backends
 graphiti-core==0.24.1
+letta-client==0.1.183
 milvus-lite==2.5.1
 neo4j==5.28.1
 pymilvus==2.5.11
-
-# Plotting notebook
-matplotlib==3.10.3
-seaborn==0.13.2
 
 # External method packages used by the repository
 -e ./code/Method/memos
