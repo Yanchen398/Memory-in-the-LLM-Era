@@ -51,7 +51,14 @@ Supported commands:
    Override values from the config file:
    python run.py sota --config_file <config.yaml> --dataset_path <path> --memory_path <path> --output_path <path>
 
-Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, and `sota` now require a config file and no longer support pure CLI-only mode.
+8. memgpt - Run the MemGPT (Letta) method
+   Basic usage (config file required):
+   python run.py memgpt --config_file <config.yaml>
+
+   Override values from the config file:
+   python run.py memgpt --config_file <config.yaml> --dataset_path <path> --output_path <path>
+
+Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, `sota`, and `memgpt` now require a config file and no longer support pure CLI-only mode.
 """
 
 import argparse
@@ -346,6 +353,58 @@ def run_amem(config_manager: ConfigManager):
         return False
 
 
+def run_memgpt(config_manager: ConfigManager):
+    """Run the MemGPT (Letta) method."""
+    print("Running MemGPT (Letta)...")
+
+    try:
+        print("Importing the MemGPT module...")
+        from Method.memgpt import run_memgpt as run_memgpt_method
+        print("MemGPT module imported successfully.")
+
+        config = config_manager.get_all()
+        config_path = config_manager.args.config_file
+
+        if config_path:
+            print(f"Using config file: {config_path}")
+
+        results = run_memgpt_method(
+            dataset_path=config.get('dataset_path'),
+            output_path=config.get('output_path'),
+            token_file=config.get('token_file'),
+            llm_model=config.get('llm_model'),
+            llm_api_key=config.get('llm_api_key'),
+            llm_base_url=config.get('llm_base_url'),
+            embedding_model_name=config.get('embedding_model_name'),
+            embedding_api_key=config.get('embedding_api_key'),
+            embedding_base_url=config.get('embedding_base_url'),
+            embedding_endpoint_type=config.get('embedding_endpoint_type'),
+            embedding_dim=config.get('embedding_dim'),
+            letta_base_url=config.get('letta_base_url'),
+            letta_pg_uri=config.get('letta_pg_uri'),
+            letta_server_command=config.get('letta_server_command'),
+            letta_init_command=config.get('letta_init_command'),
+            letta_startup_timeout=config.get('letta_startup_timeout'),
+            retrieve_k=config.get('retrieve_k', 10),
+            start_idx=config.get('start_idx', 0),
+            end_idx=config.get('end_idx'),
+            config_path=config_path,
+        )
+
+        sample_count = len(results) if isinstance(results, list) else 0
+        print(f"MemGPT completed successfully. Aggregated {sample_count} sample results.")
+        return True
+
+    except ImportError as e:
+        print(f"Error: failed to import the MemGPT module: {e}")
+        return False
+    except Exception as e:
+        print(f"Error: MemGPT raised an exception: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 
 def main():
     parser = argparse.ArgumentParser(description='Unified runner with config-file support and CLI overrides')
@@ -480,6 +539,29 @@ def main():
     parser_sota.add_argument('--llm_api_key', type=str, help='LLM API key')
     parser_sota.add_argument('--llm_base_url', type=str, help='LLM API base URL')
     parser_sota.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
+
+    # MemGPT (Letta) method
+    parser_memgpt = subparsers.add_parser('memgpt', help='Run the MemGPT (Letta) method')
+    parser_memgpt.add_argument('--config_file', type=str, help='Path to the config file')
+    parser_memgpt.add_argument('--dataset_path', type=str, help='Dataset path')
+    parser_memgpt.add_argument('--output_path', type=str, help='Output path')
+    parser_memgpt.add_argument('--token_file', type=str, help='Token tracking output file path')
+    parser_memgpt.add_argument('--llm_model', type=str, help='LLM model ID or path')
+    parser_memgpt.add_argument('--llm_api_key', type=str, help='LLM API key')
+    parser_memgpt.add_argument('--llm_base_url', type=str, help='LLM API base URL')
+    parser_memgpt.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
+    parser_memgpt.add_argument('--embedding_api_key', type=str, help='Embedding API key')
+    parser_memgpt.add_argument('--embedding_base_url', type=str, help='Embedding API base URL')
+    parser_memgpt.add_argument('--embedding_endpoint_type', type=str, help='Embedding endpoint type')
+    parser_memgpt.add_argument('--embedding_dim', type=int, help='Embedding dimension')
+    parser_memgpt.add_argument('--letta_base_url', type=str, help='Letta server base URL')
+    parser_memgpt.add_argument('--letta_pg_uri', type=str, help='Letta PostgreSQL URI')
+    parser_memgpt.add_argument('--letta_server_command', type=str, help='Command used to start the Letta server')
+    parser_memgpt.add_argument('--letta_init_command', type=str, help='Optional Letta initialization command')
+    parser_memgpt.add_argument('--letta_startup_timeout', type=int, help='Letta server startup timeout in seconds')
+    parser_memgpt.add_argument('--retrieve_k', type=int, help='Number of memories to retrieve')
+    parser_memgpt.add_argument('--start_idx', type=int, help='Start sample index (inclusive)')
+    parser_memgpt.add_argument('--end_idx', type=int, help='End sample index (exclusive)')
     
     args = parser.parse_args()
     
@@ -513,6 +595,8 @@ def main():
         success = run_memos(config_manager)
     elif args.command == 'sota':
         success = run_sota(config_manager)
+    elif args.command == 'memgpt':
+        success = run_memgpt(config_manager)
     else:
         print(f"Error: unknown command '{args.command}'")
         parser.print_help()

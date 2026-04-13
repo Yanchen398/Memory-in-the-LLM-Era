@@ -1,0 +1,23 @@
+dataset_path: ./Dataset/LOCOMO/locomo10.json
+output_path: ./Result/LOCOMO/memgpt/test/result.json
+token_file: ./Result/LOCOMO/memgpt/test/token_tracker.json
+
+llm_model: your/chat/model/path
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+
+embedding_model_name: your/embedding/model/path
+embedding_api_key: empty
+embedding_base_url: http://localhost:7999/v1
+embedding_endpoint_type: openai
+embedding_dim: 384
+
+letta_base_url: http://127.0.0.1:8283
+letta_pg_uri: postgresql+psycopg2://letta_user:letta_pass@localhost:5432/letta
+letta_server_command: letta server --host 127.0.0.1 --port 8283
+# letta_init_command:
+letta_startup_timeout: 90
+
+retrieve_k: 10
+start_idx: 0
+# end_idx:
