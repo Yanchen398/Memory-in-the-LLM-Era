@@ -1,0 +1,13 @@
+dataset_path: ./Dataset/LOCOMO/locomo10.json
+output_path: ./Result/LOCOMO/memorybank/test/result.json
+token_file: ./Result/LOCOMO/memorybank/test/token_tracker.json
+
+llm_model: your/llm/model/path
+llm_api_key: EMPTY
+llm_base_url: http://localhost:8000/v1
+embedding_model_name: sentence-transformers/all-MiniLM-L6-v2
+
+retrieve_k: 10
+ratio: 1.0
+start_idx: 0
+# end_idx:

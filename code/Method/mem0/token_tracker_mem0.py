@@ -1,12 +1,12 @@
 import json
 import time
-from collections import defaultdict
+
 
 class TokenTracker:
     def __init__(self, output_file=None):
         self.output_file = output_file
         self.reset()
-        self._stage_stack = ["root"]  # 默认根阶段
+        self._stage_stack = ["root"]
 
     def reset(self):
         self.stats = {
@@ -17,7 +17,7 @@ class TokenTracker:
             "start_time": None,
             "end_time": None,
             "duration_seconds": 0,
-            "sub_stages": {}  # 嵌套结构
+            "sub_stages": {}
         }
         self._current_node = self.stats
 

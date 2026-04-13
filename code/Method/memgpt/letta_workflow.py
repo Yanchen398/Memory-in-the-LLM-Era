@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import re
 import time
@@ -7,9 +6,6 @@ from contextlib import contextmanager, nullcontext
 
 import requests
 from openai import OpenAI
-
-
-logger = logging.getLogger(__name__)
 
 DEFAULT_LLM_MODEL = "Qwen/Qwen2.5-72B-Instruct-AWQ"
 DEFAULT_LLM_API_KEY = "empty"

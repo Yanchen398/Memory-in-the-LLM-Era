@@ -72,7 +72,14 @@ Supported commands:
    Override values from the config file:
    python run.py mem0g --config_file <config.yaml> --dataset_path <path> --output_path <path>
 
-Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, `sota`, `memgpt`, `mem0`, and `mem0g` now require a config file and no longer support pure CLI-only mode.
+11. memorybank - Run the MemoryBank method
+   Basic usage (config file required):
+   python run.py memorybank --config_file <config.yaml>
+
+   Override values from the config file:
+   python run.py memorybank --config_file <config.yaml> --dataset_path <path> --output_path <path>
+
+Note: `memtree`, `memoryos`, `zep`, `memochat`, `memos`, `sota`, `memgpt`, `mem0`, `mem0g`, and `memorybank` now require a config file and no longer support pure CLI-only mode.
 """
 
 import argparse
@@ -481,6 +488,50 @@ def run_mem0g(config_manager: ConfigManager):
     return _run_mem0_variant(config_manager, graph_mode=True)
 
 
+def run_memorybank(config_manager: ConfigManager):
+    """Run the MemoryBank method."""
+    print("Running MemoryBank...")
+
+    try:
+        print("Importing the MemoryBank module...")
+        from Method.memorybank import run_memorybank as run_memorybank_method
+        print("MemoryBank module imported successfully.")
+
+        config = config_manager.get_all()
+        config_path = config_manager.args.config_file
+
+        if config_path:
+            print(f"Using config file: {config_path}")
+
+        results = run_memorybank_method(
+            dataset_path=config.get('dataset_path') or config.get('dataset'),
+            output_path=config.get('output_path') or config.get('output'),
+            token_file=config.get('token_file'),
+            llm_model=config.get('llm_model') or config.get('model'),
+            llm_api_key=config.get('llm_api_key'),
+            llm_base_url=config.get('llm_base_url'),
+            embedding_model_name=config.get('embedding_model_name'),
+            retrieve_k=config.get('retrieve_k', 10),
+            ratio=config.get('ratio', 1.0),
+            start_idx=config.get('start_idx', 0) if config.get('start_idx') is not None else config.get('start_id', 0),
+            end_idx=config.get('end_idx') if config.get('end_idx') is not None else config.get('end_id'),
+            config_path=config_path,
+        )
+
+        sample_count = len(results) if isinstance(results, list) else 0
+        print(f"MemoryBank completed successfully. Aggregated {sample_count} sample results.")
+        return True
+
+    except ImportError as e:
+        print(f"Error: failed to import the MemoryBank module: {e}")
+        return False
+    except Exception as e:
+        print(f"Error: MemoryBank raised an exception: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 
 def main():
     parser = argparse.ArgumentParser(description='Unified runner with config-file support and CLI overrides')
@@ -683,6 +734,21 @@ def main():
     parser_mem0g.add_argument('--neo4j_uri', type=str, help='Neo4j URI')
     parser_mem0g.add_argument('--neo4j_user', type=str, help='Neo4j username')
     parser_mem0g.add_argument('--neo4j_password', type=str, help='Neo4j password')
+
+    # MemoryBank method
+    parser_memorybank = subparsers.add_parser('memorybank', help='Run the MemoryBank method')
+    parser_memorybank.add_argument('--config_file', type=str, help='Path to the config file')
+    parser_memorybank.add_argument('--dataset_path', '--dataset', dest='dataset_path', type=str, help='Dataset path')
+    parser_memorybank.add_argument('--output_path', '--output', dest='output_path', type=str, help='Output result path')
+    parser_memorybank.add_argument('--token_file', type=str, help='Token tracking output file path')
+    parser_memorybank.add_argument('--llm_model', '--model', dest='llm_model', type=str, help='LLM model ID or path')
+    parser_memorybank.add_argument('--llm_api_key', type=str, help='LLM API key')
+    parser_memorybank.add_argument('--llm_base_url', type=str, help='LLM API base URL')
+    parser_memorybank.add_argument('--embedding_model_name', type=str, help='Embedding model name or path')
+    parser_memorybank.add_argument('--retrieve_k', type=int, help='Number of memory chunks to retrieve')
+    parser_memorybank.add_argument('--ratio', type=float, help='Dataset processing ratio')
+    parser_memorybank.add_argument('--start_idx', '--start_id', dest='start_idx', type=int, help='Start sample index (inclusive)')
+    parser_memorybank.add_argument('--end_idx', '--end_id', dest='end_idx', type=int, help='End sample index (exclusive)')
     
     args = parser.parse_args()
     
@@ -722,6 +788,8 @@ def main():
         success = run_mem0(config_manager)
     elif args.command == 'mem0g':
         success = run_mem0g(config_manager)
+    elif args.command == 'memorybank':
+        success = run_memorybank(config_manager)
     else:
         print(f"Error: unknown command '{args.command}'")
         parser.print_help()
