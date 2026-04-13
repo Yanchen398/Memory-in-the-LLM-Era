@@ -33,7 +33,7 @@ We implement and evaluate the following memory architectures under our unified f
 | **A-MEM** | [arXiv 2502.12110](https://arxiv.org/abs/2502.12110) | [GitHub](https://github.com/WujiangXu/AgenticMemory) |
 | **MemoryBank** | [arXiv 2305.10250](https://arxiv.org/abs/2305.10250) | [GitHub](https://github.com/zhongwanjun/MemoryBank-SiliconFriend) |
 | **MemGPT (Letta)** | [arXiv 2310.08560](https://arxiv.org/abs/2310.08560) | [GitHub](https://github.com/letta-ai/letta) |
-| **Mem0 / Mem0$^g$** | [arXiv 2504.19413](https://arxiv.org/abs/2504.19413) | [GitHub](https://github.com/mem0ai/mem0) |
+| **Mem0 / Mem0<sup>g</sup>** | [arXiv 2504.19413](https://arxiv.org/abs/2504.19413) | [GitHub](https://github.com/mem0ai/mem0) |
 | **MemoChat** | [arXiv 2308.08239](https://arxiv.org/abs/2308.08239) | [GitHub](https://github.com/LuJunru/MemoChat) |
 | **Zep (Graphiti)** | [arXiv 2501.13956](https://arxiv.org/abs/2501.13956) | [GitHub](https://github.com/getzep/graphiti) |
 | **MemTree** | [arXiv 2410.14052](https://arxiv.org/abs/2410.14052) | *(no official implementation)* |
