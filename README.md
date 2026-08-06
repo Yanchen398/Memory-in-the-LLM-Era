@@ -39,6 +39,8 @@ We implement and evaluate the following memory architectures under our unified f
 | **MemTree** | [arXiv 2410.14052](https://arxiv.org/abs/2410.14052) | *(no official implementation)* |
 | **MemoryOS** | [arXiv 2506.06326](https://arxiv.org/abs/2506.06326) | [GitHub](https://github.com/BAI-LAB/MemoryOS) |
 | **MemOS** | [arXiv 2507.03724](https://arxiv.org/abs/2507.03724) | [GitHub](https://github.com/MemTensor/MemOS) |
+| **LightMem** | [arXiv 2510.18866](https://arxiv.org/abs/2510.18866) | [GitHub](https://github.com/zjunlp/LightMem) |
+| **MemGAS** | [arXiv 2505.19549](https://arxiv.org/abs/2505.19549) | [GitHub](https://github.com/quqxui/MemGAS) |
 
 ### Installation
 
@@ -72,8 +74,10 @@ code/
 ├── utils.py                # ConfigManager and shared utilities
 ├── Config/                 # YAML config files for each method
 │   ├── amem.yaml
+│   ├── lightmem.yaml
 │   ├── mem0.yaml
 │   ├── mem0g.yaml
+│   ├── memgas.yaml
 │   ├── memgpt.yaml
 │   ├── memochat.yaml
 │   ├── memorybank.yaml
@@ -84,7 +88,9 @@ code/
 │   └── zep.yaml
 ├── Method/                 # Method implementations
 │   ├── amem/
+│   ├── lightmem/
 │   ├── mem0/
+│   ├── memgas/
 │   ├── memgpt/
 │   ├── memochat/
 │   ├── memorybank/
@@ -95,10 +101,12 @@ code/
 │   └── zep/
 ├── Dataset/                # Dataset files (not included, see below)
 │   ├── LOCOMO/
-│   └── LONGMEMEVAL/
+│   ├── LONGMEMEVAL/
+│   └── MemoryArena/
 └── Result/                 # Output results (auto-created)
     ├── LOCOMO/
-    └── LONGMEMEVAL/
+    ├── LONGMEMEVAL/
+    └── MemoryArena/
 ```
 
 ### Datasets
@@ -118,12 +126,13 @@ code/Dataset/
 #### Dataset Preparation
 
 - **LOCOMO**: download the dataset from <https://github.com/snap-research/locomo/tree/main/data> and use it directly.
-- **LongMemEval (LME)**: the dataset download link can be found at <https://github.com/xiaowu0162/LongMemEval/tree/main>. After downloading the dataset, run `code/Dataset/LONGMEMEVAL/transform.py` to convert it into the LOCOMO-aligned format used by this repository.
+- **LongMemEval (LME)**: the dataset download link can be found at <https://xiaowu0162.github.io/long-mem-eval/>. After downloading the dataset, run `code/Dataset/LONGMEMEVAL/transform.py` to convert it into the LOCOMO-aligned format used by this repository.
 - **LongMemEval variants for analysis**: for the position sensitivity analysis and context scalability analysis variants, first run `code/Dataset/LONGMEMEVAL/gen_variants.py` to generate the variant files, and then run `code/Dataset/LONGMEMEVAL/transform.py` on those generated variants as well.
+- **MemoryArena**: the dataset download link can be found at <https://memoryarena.github.io/>.
 
 #### Dataset JSON Format
 
-All datasets used by this repository are expected to follow a unified schema that is aligned with the LOCOMO format. LongMemEval and all LongMemEval variants should be converted to this format before use:
+All conversational datasets used by this repository are expected to follow a unified schema that is aligned with the LOCOMO format. LongMemEval and all LongMemEval variants should be converted to this format before use:
 
 ```text
 [
