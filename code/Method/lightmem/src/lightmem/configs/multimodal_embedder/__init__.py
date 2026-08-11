@@ -1,0 +1,1 @@
+"""Multimodal embedder configuration package."""

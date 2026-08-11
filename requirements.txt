@@ -6,8 +6,11 @@ aiofiles==24.1.0
 numpy==1.26.2
 openai==1.91.0
 pandas==2.2.3
+pydantic==2.11.7
 PyYAML==6.0.2
+python-igraph==0.11.8
 python-dotenv==1.1.1
+qdrant-client==1.14.2
 requests==2.32.3
 tiktoken==0.9.0
 tqdm==4.67.1
@@ -25,6 +28,7 @@ scipy==1.15.3
 sentence-transformers==4.1.0
 torch==2.6.0
 transformers==4.51.3
+llmlingua==0.2.2
 
 graphiti-core==0.24.1
 letta-client==0.1.183

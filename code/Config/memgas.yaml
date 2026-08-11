@@ -1,0 +1,49 @@
+# These paths are relative to code/Config/ (the location of this file).
+dataset_path: ../Dataset/LOCOMO/locomo10.json
+output_path: ../Result/LOCOMO/memgas/test/result.json
+memory_path: ../Result/LOCOMO/memgas/test/runtime
+token_file: ../Result/LOCOMO/memgas/test/token_tracker.json
+
+# OpenAI-compatible model used for memory summarization and answer generation.
+llm_model: your/llm/model/path
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+llm_provider: vllm
+llm_max_tokens: 500
+llm_temperature: 0.0
+llm_max_retries: 3
+llm_retry_wait_sec: 2.0
+llm_context_window: 16384
+llm_prompt_token_buffer: 128
+llm_use_qwen_thinking_control: true
+
+# Native MemGAS uses Contriever. Other choices: mpnet, minilm, qaminilm, openai.
+embedder: contriever
+device: cpu
+batch_size: 64
+embedder_max_tokens: 256
+# The following three fields are required only when embedder is openai.
+embedder_api_key: EMPTY
+# embedder_base_url: http://localhost:7999/v1
+# embedder_model: your/embedding/model/path
+
+# Retrieval settings. The largest top-k is also written to output_path.
+retrieve_k: 3
+retrieve_top_ks: [1, 3, 5, 10, 15]
+mode: memgas
+mem_threshold: 30
+n_components: 2
+num_seednodes: 15
+damping: 0.1
+router_temp: 0.2
+
+# Dataset slicing, execution, tracking, and optional evaluation.
+ratio: 1.0
+start_idx: 0
+# end_idx:
+num_workers: 1
+track_tokens: true
+record_latency: true
+auto_eval: false
+eval_dataset: loco
+# eval_embedding_model: Qwen3-Embedding-0.6B

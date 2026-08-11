@@ -1,0 +1,50 @@
+# These paths are relative to code/Config/ (the location of this file).
+dataset_path: ../Dataset/LOCOMO/locomo10.json
+output_path: ../Result/LOCOMO/lightmem/test/result.json
+memory_path: ../Result/LOCOMO/lightmem/test/runtime
+token_file: ../Result/LOCOMO/lightmem/test/token_tracker.json
+
+# OpenAI-compatible memory/answer model.
+llm_model: your/llm/model/path
+llm_api_key: empty
+llm_base_url: http://localhost:8000/v1
+llm_provider: openai
+
+# Local Hugging Face embedder (the dimension must match the selected model).
+embedding_model_name: sentence-transformers/all-MiniLM-L6-v2
+embedding_dim: 384
+embedding_device: cpu
+
+# Retrieval. LightMem emits one result directory for every LOCOMO top-k value.
+retrieve_k: 10
+retrieve_top_ks: [1, 3, 5, 10, 15]
+
+# Official LightMem memory construction settings.
+pre_compress: true
+llmlingua_model_path: microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank
+compression_rate: 0.6
+topic_segment: true
+metadata_generate: true
+text_summary: true
+extraction_mode: flat
+
+# Offline memory update and optional global summary.
+enable_update: true
+update_top_k: 20
+update_keep_top_n: 10
+update_score_threshold: 0.9
+update_workers: 5
+enable_summary: false
+summary_time_window: 3600
+summary_top_k_seeds: 15
+
+# Dataset slicing, parallelism, caching, and evaluation.
+ratio: 1.0
+start_idx: 0
+# end_idx:
+num_processes: 1
+worker_cuda_device_count: 0
+force_rebuild: false
+track_tokens: true
+auto_eval: false
+# eval_embedding_model: sentence-transformers/all-MiniLM-L6-v2
