@@ -1,0 +1,40 @@
+# MemoryArena shopping runtime
+beautifulsoup4==4.11.1
+cleantext==1.1.4
+datasets>=2.0.0
+faiss-cpu>=1.7.0
+fastapi==0.109.0
+Flask==2.1.2
+gym==0.24.0
+numpy==1.22.4
+openai>=1.0.0
+pydantic==2.5.3
+pyserini==0.17.0
+python-dotenv==1.0.0
+PyYAML>=6.0
+rank_bm25==0.2.2
+requests==2.31.0
+rich==12.4.4
+semantic-text-splitter>=0.13.0
+spacy==3.3.0
+thefuzz==0.19.0
+tiktoken>=0.5.0
+torch==1.11.0
+tqdm==4.64.0
+urllib3>=1.26.0
+uvicorn==0.27.0
+
+# Optional: LLM backends (install only what you need)
+# anthropic>=0.20.0          # Claude models
+# google-generativeai>=0.5.0 # Gemini models
+
+# Optional: memory systems (install only what you need)
+# mem0ai                     # mem0 / mem0-g
+# letta-client               # letta
+# memorag                    # memorag
+# mirix                      # mirix
+
+# Extra non-pip requirements:
+# 1. A JDK with javac available (or set JAVA_HOME explicitly).
+# 2. spaCy model:
+#    python -m spacy download en_core_web_lg
