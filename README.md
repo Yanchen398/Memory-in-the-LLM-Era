@@ -87,6 +87,7 @@ code/
 │   ├── sota.yaml
 │   └── zep.yaml
 ├── Method/                 # Method implementations
+│   ├── ablation/           # Component-level ablation experiments
 │   ├── amem/
 │   ├── lightmem/
 │   ├── mem0/
@@ -99,6 +100,7 @@ code/
 │   ├── memtree/
 │   ├── sota/
 │   └── zep/
+├── Method_memoryarena/     # Unified MemoryArena method integrations
 ├── Dataset/                # Dataset files (not included, see below)
 │   ├── LOCOMO/
 │   ├── LONGMEMEVAL/
@@ -108,6 +110,17 @@ code/
     ├── LONGMEMEVAL/
     └── MemoryArena/
 ```
+
+### Additional Experiment Suites
+
+- **MemoryArena**: `code/Method_memoryarena/` contains unified adapters for the
+  supported memory methods and shared runners for evaluating them on
+  MemoryArena tasks. See the
+  [MemoryArena README](code/Method_memoryarena/README.md) for setup and usage.
+- **Ablation experiments**: `code/Method/ablation/` contains the component-level
+  ablations, including the extraction-granularity and mid-term-structure
+  combinations, re-retrieval experiments, and the MemoryOS segment variant.
+  See the [ablation README](code/Method/ablation/README.md) for setup and usage.
 
 ### Datasets
 
