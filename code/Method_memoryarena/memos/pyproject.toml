@@ -1,0 +1,111 @@
+# Poetry related
+
+[tool.poetry]
+name = "MemoryOS"
+version = "0.1.13"
+description = "Intelligence Begins with Memory"
+license = "Apache-2.0"
+authors = ["MemTensor <lizy@memtensor.cn>"]
+readme = "README.md"
+repository = "https://github.com/MemTensor/MemOS"
+keywords = ["memory", "llm", "language model", "memoryOS", "agent"]
+packages = [{include = "memos", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai = "^1.77.0"
+ollama = "^0.4.8"
+qdrant-client = "^1.14.2"
+transformers = "^4.51.3"
+markitdown = {extras = ["docx", "pdf", "pptx", "xls", "xlsx"], version = "^0.1.1"}
+chonkie = "^1.0.7"
+tenacity = "^9.1.2"
+neo4j = "^5.28.1"
+accelerate = "^1.7.0"
+fastapi = {extras = ["all"], version = "^0.115.12"}
+sentence-transformers = "^4.1.0"
+sqlalchemy = "^2.0.41"
+redis = "^6.2.0"
+
+[tool.poetry.group.dev]
+optional = false
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.2.0"
+ruff = "^0.11.8"
+
+[tool.poetry.group.test]
+optional = false
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.5"
+pytest-asyncio = "^0.23.5"
+
+[tool.poetry.group.eval]
+optional = true
+
+[tool.poetry.group.eval.dependencies]
+dotenv = "^0.9.9"
+mem0ai = "^0.1.109"
+zep-cloud = "^2.15.0"
+rouge-score = "^0.1.2"
+nltk = "^3.9.1"
+bert-score = "^0.3.13"
+scipy = "^1.10.1"
+python-dotenv = "^1.1.1"
+langgraph = "^0.5.1"
+langmem = "^0.0.27"
+
+[[tool.poetry.source]]
+name = "mirrors"
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+priority = "supplemental"
+
+
+# Building related
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+# Testing related
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = "src"
+filterwarnings = [
+    "ignore::DeprecationWarning:qdrant_client.*",
+]
+
+
+# Linting related
+
+[tool.ruff]
+fix = true
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+extend-select = [
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "ERA", # flake8-eradicate/eradicate
+    "I",   # isort
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PGH", # pygrep
+    "RUF", # ruff checks
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+]
+ignore = [
+    "RUF001", # ambiguous-unicode-character-string
+    "PGH003", # blanket-type-ignore
+]
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+lines-after-imports = 2
