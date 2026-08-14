@@ -1,0 +1,44 @@
+# Common LOCOMO/Qwen3.5-9B configuration for all four ablation combinations.
+base_threshold: 0.4
+collection_name: memory_tree
+dimension: 384
+embedding_batch_size: 256
+embedding_model_name: ${ABLATION_EMBEDDING_MODEL}
+embedding_storage_name: minilm
+embedding_api_key: EMPTY
+embedding_base_url: ${ABLATION_EMBEDDING_BASE_URL}
+
+llm_api_key: EMPTY
+llm_base_url: ${ABLATION_LLM_BASE_URLS}
+llm_model: ${ABLATION_LLM_MODEL}
+per_endpoint_concurrency: 16
+qa_parallel_nums: 4
+
+memory_granularity: segment
+mid_term_structure: tree
+short_term_capacity: 7
+segment_threshold: 0.5
+graph_context_window: 3
+graph_candidate_count: 10
+graph_dedupe_candidate_count: 20
+milvus_init_attempts: 5
+graph_fuzzy_threshold: 0.9
+graph_search_hops: 1
+graph_use_llm_dedup: true
+graph_use_edge_dedup: true
+graph_save_name: memory_graph.json
+graph_only_retrieval: true
+
+max_depth: 15
+rate: 0.5
+save_name: memtree.pkl
+top_k_retrieve: 10
+vdb_name: milvus.db
+
+parallel: true
+num_processes: 10
+
+dataset_path: ${ABLATION_DATASET_PATH}
+ablation_root: ${ABLATION_OUTPUT_ROOT}
+memory_path: ${ABLATION_OUTPUT_ROOT}/{memory_granularity}_{mid_term_structure}/memory
+output_path: ${ABLATION_OUTPUT_ROOT}/{memory_granularity}_{mid_term_structure}/result.json

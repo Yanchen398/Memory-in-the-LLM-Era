@@ -1,0 +1,26 @@
+dataset_path: ${ABLATION_DATASET_PATH}
+output_path: ${ABLATION_OUTPUT_ROOT}/memoryos_segment/result.json
+memory_path: ${ABLATION_OUTPUT_ROOT}/memoryos_segment/memory
+token_file: ${ABLATION_OUTPUT_ROOT}/memoryos_segment/token_usage.json
+
+memoryos_entrypoint: main
+memory_granularity: segment
+short_term_capacity: 7
+segment_threshold: 0.5
+segment_max_messages: 0
+
+llm_model: ${ABLATION_LLM_MODEL}
+llm_api_key: EMPTY
+llm_base_url: ${ABLATION_LLM_BASE_URL}
+embedding_model_name: ${ABLATION_EMBEDDING_MODEL}
+embedding_api_key: EMPTY
+embedding_base_url: ${ABLATION_EMBEDDING_BASE_URL}
+
+retrieve_top_ks: [10]
+sample_concurrency: 8
+sample_max_retries: 2
+qa_concurrency: 4
+track_tokens: true
+fast_index: false
+update_profiles: true
+use_retrieval_keywords: true

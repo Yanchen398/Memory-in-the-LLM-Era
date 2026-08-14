@@ -3,6 +3,7 @@
 #   replace it with a compatible `faiss-gpu` build for your platform.
 
 aiofiles==24.1.0
+fastapi==0.128.0
 numpy==1.26.2
 openai==1.91.0
 pandas==2.2.3
@@ -14,6 +15,7 @@ qdrant-client==1.14.2
 requests==2.32.3
 tiktoken==0.9.0
 tqdm==4.67.1
+uvicorn==0.40.0
 
 bert-score==0.3.13
 faiss-cpu==1.11.0
