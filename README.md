@@ -1,6 +1,4 @@
-# Memory in the LLM Era: Modular Architectures and Strategies within a Unified Framework
-
-Paper: <https://arxiv.org/pdf/2604.01707>
+# In-depth Analysis of Agent Memory Methods in a Unified Framework
 
 This repository contains the supplementary materials, including the appendix, source code, and plotting notebooks for the figures reported in the paper.
 
