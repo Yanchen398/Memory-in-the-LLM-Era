@@ -1,26 +1,8 @@
 # In-depth Analysis of Agent Memory Methods in a Unified Framework
 
-This repository contains the supplementary materials, including the appendix, source code, and plotting notebooks for the figures reported in the paper.
+Paper: [https://arxiv.org/abs/2604.01707](https://arxiv.org/abs/2604.01707)
 
 In this paper, we propose a unified modular framework that decomposes existing agent memory systems into four components: *Information Extraction*, *Memory Management*, *Memory Storage*, and *Information Retrieval*. We systematically benchmark representative memory methods together with our newly designed state-of-the-art method on long-term conversational datasets.
-
-## Repository Overview
-
-- `appendix.pdf`: supplementary appendix of the paper.
-- `code/`: source code and detailed instructions for running experiments and reproducing the main results.
-- `figure_plot.ipynb`: Jupyter notebooks for plotting the figures appearing in the paper. For convenience, the final results used for plotting are directly included in these notebooks. The corresponding raw results can be obtained by running the code in `code/`.
-
-## How to Navigate This Repository
-
-If you would like to read the supplementary technical details, please start with `appendix.pdf`.
-
-If you would like to reproduce the experimental results, please continue to the code and reproduction guide below.
-
-If you would like to inspect or regenerate the figures in the paper, please open the provided Jupyter notebook in the repository root.
-
-## Code and Reproduction Guide
-
-The `code/` directory contains the official implementation for the paper.
 
 ### Supported Memory Methods
 
