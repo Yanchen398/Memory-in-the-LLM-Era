@@ -1,5 +1,7 @@
 # In-depth Analysis of Agent Memory Methods in a Unified Framework
 
+Paper: [https://arxiv.org/abs/2604.01707](https://arxiv.org/abs/2604.01707)
+
 In this paper, we propose a unified modular framework that decomposes existing agent memory systems into four components: *Information Extraction*, *Memory Management*, *Memory Storage*, and *Information Retrieval*. We systematically benchmark representative memory methods together with our newly designed state-of-the-art method on long-term conversational datasets.
 
 ### Supported Memory Methods
