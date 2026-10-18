@@ -29,13 +29,6 @@ We implement and evaluate the following memory architectures under our unified f
 - Neo4j graph database (for Mem0<sup>g</sup>, Zep and MemOS)
 - PostgreSQL 14 with pgvector enabled (for MemGPT)
 
-#### Get the Code
-
-```bash
-git clone https://github.com/Yanchen398/Memory-in-the-LLM-Era.git
-cd Memory-in-the-LLM-Era/code
-```
-
 #### Install Dependencies
 
 ```bash
